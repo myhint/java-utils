@@ -1,7 +1,12 @@
 package com.example.utils.collection;
 
+import com.example.utils.datetime.DateUtil;
+import com.example.utils.random.RandomUtils;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,6 +92,29 @@ public class CollectionUtil {
         System.out.println(" ====== 求并集 ====== ");
         List<Integer> unionSet = CollectionUtil.getUnionSet(list1, list2);
         unionSet.forEach(System.out::println);
+
+        BigDecimal bigDecimal = BigDecimal.valueOf(10);
+        BigDecimal bigDecimal1 = BigDecimal.valueOf(20.0);
+
+        double v = bigDecimal.doubleValue() * bigDecimal1.doubleValue();
+
+        System.out.println(v);
+
+        String replace = DateUtil.dateFormatWithyyyyMMddHHmmss(new Date());
+
+
+        String fixLengthString = RandomUtils.getFixLengthString(12);
+
+        String concat = replace.concat(fixLengthString);
+
+        System.out.println(replace.length());
+        System.out.println(fixLengthString.length());
+        System.out.println(concat);
+
+        /**
+         * 20181213121212   32-14 = 18位
+         */
+
     }
 
 }
