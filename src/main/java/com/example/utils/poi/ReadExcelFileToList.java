@@ -6,6 +6,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,90 +16,114 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * @Description 导入Excel demo演示
+ * @Description Excel文件导入 demo演示
  * @Author blake
  * @Date 2019-01-25 11:50
  * @Version 1.0
  */
 public class ReadExcelFileToList {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReadExcelFileToList.class);
+
+    /**
+     * @return java.util.List<com.example.utils.poi.Country>
+     * @throws
+     * @description 读取Excel文件中的数据
+     * @params [fileName]
+     */
     public static List<Country> readExcelData(String fileName) {
-        List<Country> countriesList = new ArrayList<Country>();
+
+        List<Country> countryList = new ArrayList<Country>();
 
         try {
-            //Create the input stream from the xlsx/xls file
+            // 文件输入流实例的初始化
             FileInputStream fis = new FileInputStream(fileName);
 
-            //Create Workbook instance for xlsx/xls file input stream
-            Workbook workbook = null;
-            if (fileName.toLowerCase().endsWith("xlsx")) {
-                workbook = new XSSFWorkbook(fis);
-            } else if (fileName.toLowerCase().endsWith("xls")) {
-                workbook = new HSSFWorkbook(fis);
-            }
+            // 按文件类型，初始化workbook
+            Workbook workbook = initWorkbookByFileType(fileName, fis);
 
-            //Get the number of sheets in the xlsx file
+            // 获取Excel文件中有效的sheet数量
             int numberOfSheets = workbook.getNumberOfSheets();
 
-            //loop through each of the sheets
-            for (int i = 0; i < numberOfSheets; i++) {
+            for (int indexOfSheets = 0; indexOfSheets < numberOfSheets; indexOfSheets++) {
 
-                //Get the nth sheet from the workbook
-                Sheet sheet = workbook.getSheetAt(i);
+                // 获取索引值对应的sheet
+                Sheet sheet = workbook.getSheetAt(indexOfSheets);
 
-                //every sheet has rows, iterate over them
-                Iterator<Row> rowIterator = sheet.iterator();
-                while (rowIterator.hasNext()) {
+                for (Row rowCells : sheet) {
                     String name = "";
-                    String shortCode = "";
+                    String code = "";
 
-                    //Get the row object
-                    Row row = rowIterator.next();
-
-                    //Every row has columns, get the column iterator and iterate over them
-                    Iterator<Cell> cellIterator = row.cellIterator();
+                    // 获取行数据Row的迭代器
+                    Iterator<Cell> cellIterator = rowCells.cellIterator();
 
                     while (cellIterator.hasNext()) {
-                        //Get the Cell object
+
+                        // 获取单元格Cell实例
                         Cell cell = cellIterator.next();
 
-                        //check the cell type and process accordingly
-                        switch (cell.getCellType()) {
+                        // 校验Cell单元格数据类型，并依次做出相应的处理
+                        switch (cell.getCellTypeEnum().getCode()) {
+
                             case Cell.CELL_TYPE_STRING:
-                                if (shortCode.equalsIgnoreCase("")) {
-                                    shortCode = cell.getStringCellValue().trim();
+
+                                if (code.equalsIgnoreCase("")) {
+                                    code = cell.getStringCellValue().trim();
                                 } else if (name.equalsIgnoreCase("")) {
-                                    //2nd column
                                     name = cell.getStringCellValue().trim();
                                 } else {
-                                    //random data, leave it
-                                    System.out.println("Random data::" + cell.getStringCellValue());
+                                    // 异常数据，无需做任何处理
+                                    System.out.println("abnormal data::" + cell.getStringCellValue());
                                 }
                                 break;
                             case Cell.CELL_TYPE_NUMERIC:
-                                System.out.println("Random data::" + cell.getNumericCellValue());
+                                System.out.println("abnormal data::" + cell.getNumericCellValue());
                         }
-                    } //end of cell iterator
-                    Country c = new Country(name, shortCode);
-                    countriesList.add(c);
-                } //end of rows iterator
+                    }
 
+                    Country country = new Country(name, code);
+                    countryList.add(country);
+                }
+            }
 
-            } //end of sheets for loop
-
-            //close file input stream
+            // 关闭文件输入流
             fis.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("============ 异常信息：[{}] ============ ", e.getMessage());
+            logger.error(" ============ [{}] ============ ", e);
         }
 
-        return countriesList;
+        return countryList;
+    }
+
+    /**
+     * @return org.apache.poi.ss.usermodel.Workbook
+     * @throws
+     * @description 初始化workbook
+     * @params [fileName, fis]
+     */
+    private static Workbook initWorkbookByFileType(String fileName, FileInputStream fis) throws IOException {
+
+        Workbook workbook = null;
+        if (fileName.toLowerCase().endsWith("xlsx")) {
+            // 2007版本的Excel
+            workbook = new XSSFWorkbook(fis);
+        } else if (fileName.toLowerCase().endsWith("xls")) {
+            // 2003版本的Excel
+            workbook = new HSSFWorkbook(fis);
+        }
+        return workbook;
     }
 
     public static void main(String args[]) {
-        List<Country> list = readExcelData("Sample.xlsx");
-        System.out.println("Country List\n" + list);
+
+        List<Country> list = readExcelData("countries.xls");
+
+        for (Country country : list) {
+            System.out.println("Record ：" + country);
+        }
+
     }
 
 }

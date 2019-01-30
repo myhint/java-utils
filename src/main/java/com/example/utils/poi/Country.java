@@ -12,14 +12,14 @@ public class Country {
 
     private String name;
 
-    private String shortCode;
+    private String code;
 
     public Country() {
     }
 
-    public Country(String name, String shortCode) {
+    public Country(String name, String code) {
         this.name = name;
-        this.shortCode = shortCode;
+        this.code = code;
     }
 
     public String getName() {
@@ -30,12 +30,12 @@ public class Country {
         this.name = name;
     }
 
-    public String getShortCode() {
-        return shortCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setShortCode(String shortCode) {
-        this.shortCode = shortCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override
@@ -44,11 +44,19 @@ public class Country {
         if (o == null || getClass() != o.getClass()) return false;
         Country country = (Country) o;
         return Objects.equals(name, country.name) &&
-                Objects.equals(shortCode, country.shortCode);
+                Objects.equals(code, country.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, shortCode);
+        return Objects.hash(name, code);
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }
