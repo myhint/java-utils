@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public class JacksonUtil {
         return null;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
 
         // json 转 list
         String json = "[1,2]";
@@ -90,7 +91,6 @@ public class JacksonUtil {
             System.out.println(ids.size());
             System.out.println(ids);
         }
-
 
     }
 
