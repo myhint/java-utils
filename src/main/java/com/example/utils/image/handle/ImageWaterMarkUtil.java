@@ -27,18 +27,6 @@ public class ImageWaterMarkUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageWaterMarkUtil.class);
 
-    public static void main(String[] args) throws IOException {
-        // 添加图片水印
-        // generatePicWaterMark();
-
-        // 添加文字水印
-        File srcImgFile = new File("zl.jpeg");
-        File outputImageFile = new File("watermark-text.jpg");
-        String logoText = "星辰大海";
-
-        generateTextWaterMark(srcImgFile, logoText, outputImageFile, 0);
-    }
-
     /**
      * @return void
      * @throws
@@ -48,11 +36,11 @@ public class ImageWaterMarkUtil {
     private static void generatePicWaterMark() throws IOException {
 
         // 原图
-        File originFile = new File("zl.jpeg");
+        File originFile = new File("images/original.jpeg");
         // 水印图片
-        File waterMarkImageFile = new File("watermark.png");
+        File waterMarkImageFile = new File("images/watermark.png");
         // 成品图片
-        File generateFile = new File("now.jpg");
+        File generateFile = new File("images/achievement.jpg");
 
         BufferedImage image = null;
         try {
@@ -68,8 +56,7 @@ public class ImageWaterMarkUtil {
 
         Thumbnails.of(originFile)
                 .size(image.getWidth(), image.getHeight())
-                .rotate(30)
-                .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(waterMarkImageFile), 0.5f)
+                .watermark(Positions.BOTTOM_LEFT, ImageIO.read(waterMarkImageFile), 0.5f)
                 .outputQuality(0.8)
                 .toFile(generateFile);
     }
@@ -109,7 +96,7 @@ public class ImageWaterMarkUtil {
                     alpha));
 
             // TODO 调整文字位置
-            graphics.drawString(logoText, buffImg.getWidth() / 3, buffImg.getHeight() / 2);
+            graphics.drawString(logoText, 5, buffImg.getHeight() / 10);
             graphics.dispose();
 
             os = new FileOutputStream(outputImageFile);
@@ -126,6 +113,19 @@ public class ImageWaterMarkUtil {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        // TODO 添加图片水印
+        // generatePicWaterMark();
+
+        // TODO 添加文字水印
+        File srcImgFile = new File("images/original.jpeg");
+        File outputImageFile = new File("images/watermark-text.jpg");
+        String logoText = "星辰大海";
+
+        generateTextWaterMark(srcImgFile, logoText, outputImageFile, 0);
     }
 
 }
