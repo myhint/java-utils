@@ -20,8 +20,7 @@ import java.util.List;
  */
 public class WriteListToExcelFile {
 
-
-    public static void writeCountryListToFile(String fileName, List<Country> countryList)
+    private static void writeCountryListToFile(String fileName, List<Country> countryList)
             throws Exception {
 
         Workbook workbook = null;
@@ -39,6 +38,7 @@ public class WriteListToExcelFile {
         Iterator<Country> iterator = countryList.iterator();
 
         int rowIndex = 0;
+
         while (iterator.hasNext()) {
             Country country = iterator.next();
             Row row = sheet.createRow(rowIndex++);
@@ -58,7 +58,6 @@ public class WriteListToExcelFile {
     }
 
     public static void main(String args[]) throws Exception {
-
         // ==================================
 
         List<Country> list = new ArrayList<>();
@@ -83,7 +82,6 @@ public class WriteListToExcelFile {
         WriteListToExcelFile.writeCountryListToFile("/Origin/dev/code/githubmine/java-utils/OutCountries.xls", list);
 
         // ==================================
-
     }
 
 }

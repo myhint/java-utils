@@ -1,4 +1,4 @@
-package com.example.utils.images;
+package com.example.utils.image.handle;
 
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
@@ -16,6 +16,9 @@ import java.util.Objects;
 
 /**
  * @Description 图片水印工具类
+ * 1）图片水印
+ * 2）文字水印
+ * 3）混合图文水印
  * @Author blake
  * @Date 2019-02-19 11:22
  * @Version 1.0
