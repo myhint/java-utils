@@ -21,7 +21,9 @@ import java.util.List;
 public class WriteListToExcelFile {
 
 
-    public static void writeCountryListToFile(String fileName, List<Country> countryList) throws Exception {
+    public static void writeCountryListToFile(String fileName, List<Country> countryList)
+            throws Exception {
+
         Workbook workbook = null;
 
         if (fileName.endsWith("xlsx")) {
@@ -40,13 +42,15 @@ public class WriteListToExcelFile {
         while (iterator.hasNext()) {
             Country country = iterator.next();
             Row row = sheet.createRow(rowIndex++);
+
             Cell cell0 = row.createCell(0);
             cell0.setCellValue(country.getName());
+
             Cell cell1 = row.createCell(1);
             cell1.setCellValue(country.getCode());
         }
 
-        //lets write the excel data to file now
+        // lets write the excel data to file now
         FileOutputStream fos = new FileOutputStream(fileName);
         workbook.write(fos); // 借助文件输出流将数据写入Excel工作表
         fos.close();
@@ -54,7 +58,9 @@ public class WriteListToExcelFile {
     }
 
     public static void main(String args[]) throws Exception {
+
         // ==================================
+
         List<Country> list = new ArrayList<>();
 
         Country country1 = new Country();
@@ -65,17 +71,18 @@ public class WriteListToExcelFile {
         country2.setName("美国");
         country2.setCode("USA");
 
+        Country country3 = new Country();
+        country3.setName("英国");
+        country3.setCode("EN");
+
         list.add(country1);
         list.add(country2);
+        list.add(country3);
 
-        WriteListToExcelFile.writeCountryListToFile("Countries.xls", list);
+        // TODO 本地测试时，务必指定文件的保存路径。这里的 /Origin/dev/code/githubmine/java-utils/ 是当前项目根目录的绝对路径，请自行调整
+        WriteListToExcelFile.writeCountryListToFile("/Origin/dev/code/githubmine/java-utils/OutCountries.xls", list);
+
         // ==================================
-
-
-//        Country country = new Country();
-//        Field[] declaredFields = country.getClass().getDeclaredFields();
-//
-//        System.out.println("Country对象的属性个数：" + declaredFields.length);
 
     }
 
